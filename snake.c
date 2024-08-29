@@ -97,12 +97,13 @@ void increase_snake(snake *head ) {
 }
 
 void render_snake(SDL_Renderer *renderer , snake *head, int x , int y) {
-    SDL_SetRenderDrawColor(renderer , 0,255,0,255) ;
+      snake *temp = head ;
+
+    SDL_SetRenderDrawColor(renderer , 0,132,12,255) ;
     int seg_size = GRID_DIM/GRID_SIZE ;
     SDL_Rect seg ;
     seg.w = seg_size ;
     seg.h = seg_size ;
-
     while (head != NULL)
     {
         seg.x = x +head->x *seg_size ;
@@ -111,7 +112,18 @@ void render_snake(SDL_Renderer *renderer , snake *head, int x , int y) {
         head = head->next ;
     }
 
-
+      SDL_SetRenderDrawColor(renderer , 0,0,0,255) ;
+    SDL_Rect eye1 , eye2 ;
+    eye1.w = (GRID_DIM/GRID_SIZE) -15 ;
+    eye1.h = (GRID_DIM/GRID_SIZE) -15;
+    eye1.x =  x+ temp->x * (GRID_DIM/GRID_SIZE) + (GRID_DIM/GRID_SIZE)/4 +5;
+    eye1.y = y + temp->y * (GRID_DIM/GRID_SIZE) + (GRID_DIM/GRID_SIZE)/4 ;
+    eye2.w = eye1.w ;
+    eye2.h = eye1.h ;
+    eye2.x = eye1.x ;
+    eye2.y = eye1.y + 7;
+        SDL_RenderFillRect(renderer, &eye1);
+        SDL_RenderFillRect(renderer, &eye2);
 
 
 }
@@ -186,7 +198,15 @@ void detect_Apple(SDL_Renderer *renderer,snake *head,  int x , int y, Apple *app
         create_apple(apple) ;
         gene_apple(renderer,x , y ,apple);
         (*score) += 4 ;
+        if (*score < 10000 )
         sprintf(result , "SCORE        %d", *score);
+        if (*score < 1000 )
+        sprintf(result , "SCORE        0%d", *score);
+        if (*score < 100  )
+        sprintf(result , "SCORE        00%d", *score);
+        if (*score < 10 )
+        sprintf(result , "SCORE        000%d", *score);
+
     }
 }
 
@@ -240,7 +260,7 @@ void detect_crash(snake **head , snake **tail , int *score , char *result) {
     {
         reset_snake(head);
         *score=0 ;
-        sprintf(result,"SCORE        %d", *score);
+        sprintf(result,"SCORE        000%d", *score);
     }
     snake *temp = (*head) ;
     if (temp != NULL && temp->next != NULL)
@@ -255,7 +275,7 @@ void detect_crash(snake **head , snake **tail , int *score , char *result) {
         {
             reset_snake(head);
             *score=0 ;
-            sprintf(result,"SCORE        %d", *score);
+            sprintf(result,"SCORE        000%d", *score);
             return;
         }
         temp = temp->next ;
