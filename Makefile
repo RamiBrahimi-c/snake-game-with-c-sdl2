@@ -1,2 +1,2 @@
 all:
-	gcc -I src/include -L src/lib -o snake snake.c -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf
+	gcc snake.c player.c Menu.c -o snake -lSDL2 -lSDL2_ttf && ./snake
